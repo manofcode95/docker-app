@@ -1,4 +1,4 @@
-FROM node:13.12.0-alpine AS build-stage
+FROM node:13.12.0-alpine
 
 WORKDIR /app
 
@@ -9,7 +9,9 @@ RUN npm i
 
 COPY . .
 
-CMD ["npm", "run", "build"]
+RUN npm run build
 
 
-FROM baseImage
+FROM nginx:1.19.2-alpine
+
+COPY --from=0 /app/build /usr/share/nginx/html

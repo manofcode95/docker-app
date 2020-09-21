@@ -1,0 +1,23 @@
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -f Dockerfile.dev -t webapp .
+
+script:
+  - docker run -e CI=true webapp npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ap-southeast-1'
+  name: 'docker-app'
+  env: 'DockerApp-env'
+  bucket-name: 'elasticbeanstalk-ap-southeast-1-293576579830'
+  access_key_id:
+    secure: "Encrypted <access-key-id>="
+  secret_access_key:
+    secure: "Encypted <secret-access-key>="
+  on:
+    branch: master
